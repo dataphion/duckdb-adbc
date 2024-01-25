@@ -48,7 +48,6 @@ func NewSqliteTablesSchemaBatchReader(ctx context.Context, mem memory.Allocator,
 					FROM pragma_table_info(table_name)
 					JOIN (` + mainQuery + `) WHERE table_name = ?`
 
-	println("schemaQueryschemaQueryschemaQueryschemaQuery", schemaQuery)
 	stmt, err := db.PrepareContext(ctx, schemaQuery)
 	if err != nil {
 		rdr.Release()

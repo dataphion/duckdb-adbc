@@ -33,7 +33,6 @@ import (
 )
 
 func getArrowTypeFromString(dbtype string) arrow.DataType {
-	fmt.Println("gggggggggggreeeeeeeeeeeeetttttttttt", dbtype)
 	dbtype = strings.ToLower(dbtype)
 	if dbtype == "" {
 		// SQLite may not know the type yet.
@@ -78,7 +77,6 @@ var sqliteDenseUnion = arrow.DenseUnionOf([]arrow.Field{
 
 func getArrowType(c *sql.ColumnType) arrow.DataType {
 	dbtype := strings.ToLower(c.DatabaseTypeName())
-	fmt.Println("dddddddddddddbbbbbbbbbbbbbbbbbbbtttttttttttt", dbtype)
 	if dbtype == "" {
 		if c.ScanType() == nil {
 			return sqliteDenseUnion
@@ -173,7 +171,7 @@ func NewSqlBatchReader(mem memory.Allocator, rows *sql.Rows) (*SqlBatchReader, e
 	cols, err := rows.ColumnTypes()
 	if err != nil {
 		rows.Close()
-		println("eerrrwre", err.Error())
+		println("error", err.Error())
 		return nil, err
 	}
 
@@ -228,7 +226,6 @@ func NewSqlBatchReader(mem memory.Allocator, rows *sql.Rows) (*SqlBatchReader, e
 				rowdest[i] = new(string)
 			}
 		case arrow.LIST:
-			fmt.Println("*** LIST")
 			var b []interface{}
 			rowdest[i] = &b
 		}
@@ -274,7 +271,7 @@ func (r *SqlBatchReader) Next() bool {
 	rows := 0
 	for rows < maxBatchSize && r.rows.Next() {
 		if err := r.rows.Scan(r.rowdest...); err != nil {
-			fmt.Println("errxxxxxxxx", err.Error())
+			fmt.Println("error", err.Error())
 			// Not really useful except for testing Flight SQL clients
 			// detail := wrapperspb.StringValue{Value: r.schema.String()}
 			// if st, sterr := status.New(codes.Unknown, err.Error()).WithDetails(&detail); sterr != nil {
@@ -289,7 +286,6 @@ func (r *SqlBatchReader) Next() bool {
 
 		for i, v := range r.rowdest {
 			fb := r.bldr.Field(i)
-			fmt.Println(i, v)
 
 			switch v := v.(type) {
 			case *uint8:
@@ -347,7 +343,6 @@ func (r *SqlBatchReader) Next() bool {
 					fb.(*array.BinaryBuilder).Append(*v)
 				}
 			case *[]interface{}:
-				fmt.Println("Insde Append Code...")
 				// Append list of strings
 				// stringData := make([]string, len(*v))
 				b := make([]bool, len(*v))

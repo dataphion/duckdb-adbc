@@ -43,7 +43,7 @@ func StartServer() {
 }
 
 func CreateDB() (*sql.DB, error) {
-	db, err := sql.Open("duckdb", "/home/adithya/Desktop/duckdb/database.db")
+	db, err := sql.Open("duckdb", "/opt/database.db")
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +243,7 @@ func (s *DuckDBFlightSQLServer) DoGetTables(ctx context.Context, cmd flightsql.G
 	fmt.Println("query", query)
 	rows, err := s.db.QueryContext(ctx, query)
 	if err != nil {
-		fmt.Println("err1", err.Error())
+		fmt.Println("error", err.Error())
 		return nil, nil, err
 	}
 
@@ -251,7 +251,7 @@ func (s *DuckDBFlightSQLServer) DoGetTables(ctx context.Context, cmd flightsql.G
 
 	rdr, err = NewSqlBatchReaderWithSchema(s.Alloc, schema_ref.Tables, rows)
 	if err != nil {
-		fmt.Println("err2", err.Error())
+		fmt.Println("error", err.Error())
 		return nil, nil, err
 	}
 
@@ -259,7 +259,7 @@ func (s *DuckDBFlightSQLServer) DoGetTables(ctx context.Context, cmd flightsql.G
 	if cmd.GetIncludeSchema() {
 		rdr, err = NewSqliteTablesSchemaBatchReader(ctx, s.Alloc, rdr, s.db, query)
 		if err != nil {
-			fmt.Println("err3", err.Error())
+			fmt.Println("error", err.Error())
 			return nil, nil, err
 		}
 	}

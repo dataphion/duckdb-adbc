@@ -40,6 +40,10 @@ func getArrowTypeFromString(dbtype string) arrow.DataType {
 		return &arrow.NullType{}
 	}
 
+	if dbtype == "varchar[]" {
+		// Return arrow.ListOf(arrow.BinaryTypes.String)
+		return arrow.ListOf(arrow.BinaryTypes.String)
+	}
 	if strings.HasPrefix(dbtype, "varchar") {
 		return arrow.BinaryTypes.String
 	}
@@ -176,6 +180,7 @@ func NewSqlBatchReader(mem memory.Allocator, rows *sql.Rows) (*SqlBatchReader, e
 	rowdest := make([]interface{}, len(cols))
 	fields := make([]arrow.Field, len(cols))
 	for i, c := range cols {
+		fmt.Println("Inside cols reader...")
 		fields[i].Name = c.Name()
 		if c.Name() == "?" {
 			fields[i].Name += ":" + strconv.Itoa(i)
@@ -222,6 +227,10 @@ func NewSqlBatchReader(mem memory.Allocator, rows *sql.Rows) (*SqlBatchReader, e
 			} else {
 				rowdest[i] = new(string)
 			}
+		case arrow.LIST:
+			fmt.Println("*** LIST")
+			var b []interface{}
+			rowdest[i] = &b
 		}
 	}
 
@@ -280,7 +289,7 @@ func (r *SqlBatchReader) Next() bool {
 
 		for i, v := range r.rowdest {
 			fb := r.bldr.Field(i)
-			fmt.Println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+			fmt.Println(i, v)
 
 			switch v := v.(type) {
 			case *uint8:
@@ -338,11 +347,18 @@ func (r *SqlBatchReader) Next() bool {
 					fb.(*array.BinaryBuilder).Append(*v)
 				}
 			case *[]interface{}:
-				// if v == nil {
-				fb.AppendNull()
-				// } else {
-				// 	fb.(*array.bin).Append(*v)
-				// }
+				fmt.Println("Insde Append Code...")
+				// Append list of strings
+				// stringData := make([]string, len(*v))
+				b := make([]bool, len(*v))
+				offsets := make([]int32, len(*v))
+				for i := range *v {
+					// stringData[i] = fmt.Sprint(j)
+					b[i] = true
+					offsets[i] = int32(i)
+				}
+				fb.(*array.ListBuilder).AppendValues(offsets, b)
+
 			case *string:
 				if v == nil {
 					fb.AppendNull()
@@ -355,7 +371,12 @@ func (r *SqlBatchReader) Next() bool {
 				} else {
 					fb.(*array.StringBuilder).Append(v.String)
 				}
+			case *bool:
+				fb.(*array.BooleanBuilder).Append(*v)
+			default:
+				fmt.Println(fmt.Sprintf("unsupported type %T", v))
 			}
+
 		}
 
 		rows++

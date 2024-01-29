@@ -345,12 +345,22 @@ func (r *SqlBatchReader) Next() bool {
 			case *[]interface{}:
 				// Append list of strings
 				// stringData := make([]string, len(*v))
-				b := make([]bool, len(*v))
-				offsets := make([]int32, len(*v))
+				b := make([]bool, 1)
+				offsets := make([]int32, 1)
 				for i := range *v {
 					// stringData[i] = fmt.Sprint(j)
 					b[i] = true
 					offsets[i] = int32(i)
+					// switch vk := k.(type) {
+					// case int:
+					// 	fmt.Println("It's an integer:", vk)
+
+					// case string:
+					// 	fmt.Println("It's a string:", vk)
+					// // Add more cases for other types as needed
+					// default:
+					// 	fmt.Println("Unknown type")
+					// }
 				}
 				fb.(*array.ListBuilder).AppendValues(offsets, b)
 

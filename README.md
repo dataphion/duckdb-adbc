@@ -14,8 +14,11 @@ This project focuses on enabling remote query execution on a DuckDB database usi
 ## Installation
 
 git clone https://github.com/dataphion/duckdb-adbc.git
+
 navigate inside duckdb-adbc
+
 go get .
+
 go mod tidy
 
 

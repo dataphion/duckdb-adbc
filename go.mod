@@ -3,7 +3,7 @@ module adbc_server/db_driver
 go 1.21.5
 
 require (
-	github.com/apache/arrow/go/v15 v15.0.0-20240110081302-72ed58449ea7
+	github.com/apache/arrow/go/v15 v15.0.0
 	github.com/marcboeker/go-duckdb v1.6.1
 	google.golang.org/grpc v1.60.1
 )

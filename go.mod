@@ -4,11 +4,12 @@ go 1.21.5
 
 require (
 	github.com/apache/arrow/go/v15 v15.0.0-20240110081302-72ed58449ea7
-	github.com/marcboeker/go-duckdb v1.5.6
+	github.com/marcboeker/go-duckdb v1.6.1
 	google.golang.org/grpc v1.60.1
 )
 
 require (
+	github.com/apache/arrow/go/v14 v14.0.2 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect

@@ -43,7 +43,7 @@ func StartServer() {
 }
 
 func CreateDB() (*sql.DB, error) {
-	db, err := sql.Open("duckdb", "/opt/database.db")
+	db, err := sql.Open("duckdb", "./database.db")
 	if err != nil {
 		return nil, err
 	}

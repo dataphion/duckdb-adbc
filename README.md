@@ -13,14 +13,15 @@ This project focuses on enabling remote query execution on a DuckDB database usi
 
 ## Installation
 
+```cmd
 git clone https://github.com/dataphion/duckdb-adbc.git
 
-navigate inside duckdb-adbc
+cd duckdb-adbc
 
 go get .
 
 go mod tidy
-
+```
 
 ## Usage
 
@@ -45,4 +46,4 @@ finally:
     # Close the cursor and connection when done
     cursor.close()
     conn.close()
-
+```

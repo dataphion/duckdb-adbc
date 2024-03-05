@@ -27,6 +27,7 @@ duckdb-adbc will be exposed in <server_ip>:8899
 
 Example using python adbc driver
 
+```python
 import adbc_driver_flightsql.dbapi
 
 conn = adbc_driver_flightsql.dbapi.connect("grpc://<server_ip>:8899")

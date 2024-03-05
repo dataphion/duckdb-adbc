@@ -25,7 +25,9 @@ go mod tidy
 
 ## Usage
 
+```run
 go run main.go
+```
 
 duckdb-adbc will be exposed in <server_ip>:8899
 

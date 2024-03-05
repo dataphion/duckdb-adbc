@@ -32,22 +32,13 @@ import adbc_driver_flightsql.dbapi
 conn = adbc_driver_flightsql.dbapi.connect("grpc://<server_ip>:8899")
 
 try:
-
     print("Connected to server")
-
     cursor = conn.cursor()
-
     # Run all DuckDB based query using cursor.execute
-
     cursor.execute("show all tables")
-
     print(cursor.fetchall())
-    
 finally:
-
     # Close the cursor and connection when done
-
     cursor.close()
-
     conn.close()
 
